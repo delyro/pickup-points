@@ -15,14 +15,16 @@ class PickupPointControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Search')->form([
             'pickup_point_search[city]' => 'Kozy',
-            'pickup_point_search[street]' => 'Gajowa 27',
-            'pickup_point_search[postalCode]' => '43-340',
         ]);
 
         $client->submit($form);
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('h2:contains("Results")');
+        $this->assertSelectorExists('p:contains("Number of points: 13")');
+        $this->assertAnySelectorTextContains('li', 'KZY01A: Gajowa 27 43-340 Kozy');
+        $this->assertAnySelectorTextContains('li', 'KZY01APP: Zagrodowa 12 43-340 Kozy');
+        $this->assertAnySelectorTextContains('li', 'KZY01BAPP: Krakowska 104 43-340 Kozy');
     }
 
     public function testInvalidPickupPointSearchFormSubmissionWithoutPostalCode(): void

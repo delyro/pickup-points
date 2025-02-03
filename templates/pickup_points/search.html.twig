@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Search Pickup Points</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.street) }}
+        {{ form_row(form.city) }}
+        {{ form_row(form.postalCode) }}
+        <button type="submit">Search</button>
+    {{ form_end(form) }}
+
+    {% if results|default(null) %}
+        <h2>Results</h2>
+        <p>Number of points: {{ results|length }}</p>
+        <ul>
+            {% for item in results %}
+                <li>{{ item.name }}: {{ item.address.line1 }} {{ item.address.line2 }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

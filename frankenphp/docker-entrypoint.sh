@@ -26,6 +26,11 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		composer install --prefer-dist --no-progress --no-interaction
 	fi
 
+	if [ "$APP_ENV" != 'prod' ]; then
+		# https://github.com/api-platform/api-platform/issues/1819
+		chmod +x bin/phpunit
+	fi
+
 	# Display information about the current project
 	# Or about an error in project initialization
 	php bin/console -V

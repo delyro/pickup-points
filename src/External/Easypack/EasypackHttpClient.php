@@ -6,6 +6,8 @@ namespace App\External\Easypack;
 
 use App\External\Easypack\Response\Response;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class EasypackHttpClient implements EasypackClientInterface
@@ -14,6 +16,7 @@ class EasypackHttpClient implements EasypackClientInterface
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
+        private readonly CacheInterface $cache,
         private readonly SerializerInterface $serializer,
         private readonly string $baseUrl,
     ) {
@@ -32,8 +35,12 @@ class EasypackHttpClient implements EasypackClientInterface
 
     public function getCityPickupPoints(string $city): Response
     {
-        return $this->get(self::POINTS_RESOURCE, [
-            'city' => $city,
-        ]);
+        return $this->cache->get(hash('xxh3', $city), function (ItemInterface $item) use ($city) {
+            $item->expiresAfter(new \DateInterval('P3D'));
+
+            return $this->get(self::POINTS_RESOURCE, [
+                'city' => $city,
+            ]);
+        });
     }
 }

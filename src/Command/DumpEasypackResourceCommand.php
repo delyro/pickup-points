@@ -33,6 +33,16 @@ class DumpEasypackResourceCommand extends Command
         $resource = $input->getArgument('resource');
         $city = $input->getArgument('city');
 
+        if (empty($resource)) {
+            $output->writeln('Please specify a resource name.');
+            return Command::FAILURE;
+        }
+
+        if (empty($city)) {
+            $output->writeln('Please specify a city name.');
+            return Command::FAILURE;
+        }
+
         try {
             $content = $this->easypackHttpClient->get($resource, ['city' => $city]);
             dump($content);

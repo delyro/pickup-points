@@ -29,4 +29,10 @@ services:
     
     App\External\Easypack\BaseUrl:
         factory: ['@App\External\Easypack\Configuration', 'getBaseUrl']
-            
+        
+    App\External\Easypack\PickupPoints\GetCityPickupPointsFromEasypackApi: ~
+    
+    App\External\Easypack\PickupPoints\CachedGetCityPickupPoints:
+        decorates: App\External\Easypack\PickupPoints\GetCityPickupPointsFromEasypackApi
+        
+    App\External\Easypack\PickupPoints\GetCityPickupPoints: '@App\External\Easypack\PickupPoints\CachedGetCityPickupPoints'

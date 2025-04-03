@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\External\Easypack\EasypackHttpClient;
+use App\External\Easypack\PickupPoints\CityPickupPoints;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,16 +36,20 @@ class DumpEasypackResourceCommand extends Command
 
         if (empty($resource)) {
             $output->writeln('Please specify a resource name.');
+
             return Command::FAILURE;
         }
 
         if (empty($city)) {
             $output->writeln('Please specify a city name.');
+
             return Command::FAILURE;
         }
 
         try {
-            $content = $this->easypackHttpClient->get($resource, ['city' => $city]);
+            // this is done intentionally
+            $response = $this->easypackHttpClient->get($resource, ['city' => $city]);
+            $content = $this->serializer->deserialize($response->getContent(), CityPickupPoints::class, 'json');
             dump($content);
         } catch (\Exception $e) {
             $output->writeln('Error: '.$e->getMessage());

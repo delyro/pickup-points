@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Form;
+namespace App\Tests\Unit\Form;
 
 use App\Form\DTO\Address;
 use App\Form\PickupPointSearchType;
@@ -36,17 +36,17 @@ class PickupPointSearchTypeTest extends TypeTestCase
         $form = $this->factory->create(PickupPointSearchType::class, $address);
         $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized(), 'Form should be synchronized after submission.');
-        $this->assertSame($address, $form->getData(), 'The form’s data should match the initial entity.');
+        self::assertTrue($form->isSynchronized(), 'Form should be synchronized after submission.');
+        self::assertSame($address, $form->getData(), 'The form’s data should match the initial entity.');
 
-        $this->assertEquals('Kozy', $address->city);
-        $this->assertEquals('Gajowa 27', $address->street);
-        $this->assertEquals('43-340', $address->postalCode);
+        self::assertEquals('Kozy', $address->city);
+        self::assertEquals('Gajowa 27', $address->street);
+        self::assertEquals('43-340', $address->postalCode);
 
         $view = $form->createView();
         $children = $view->children;
         foreach (array_keys($formData) as $field) {
-            $this->assertArrayHasKey($field, $children, sprintf('Form should contain field "%s".', $field));
+            self::assertArrayHasKey($field, $children, sprintf('Form should contain field "%s".', $field));
         }
     }
 
@@ -63,13 +63,13 @@ class PickupPointSearchTypeTest extends TypeTestCase
         $form = $this->factory->create(PickupPointSearchType::class, $address);
         $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
+        self::assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
 
-        $this->assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
+        self::assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
         $errors = $form->get('city')->getErrors(true);
-        $this->assertCount(2, $errors);
-        $this->assertEquals('This value should not be blank.', $errors[0]->getMessage());
-        $this->assertSame('This value is too short. It should have 3 characters or more.', $errors[1]->getMessage());
+        self::assertCount(2, $errors);
+        self::assertEquals('This value should not be blank.', $errors[0]->getMessage());
+        self::assertSame('This value is too short. It should have 3 characters or more.', $errors[1]->getMessage());
     }
 
     public function testSubmitWithCityTooLong(): void
@@ -85,12 +85,12 @@ class PickupPointSearchTypeTest extends TypeTestCase
         $form = $this->factory->create(PickupPointSearchType::class, $address);
         $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
+        self::assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
 
-        $this->assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
+        self::assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
         $errors = $form->get('city')->getErrors(true);
-        $this->assertCount(1, $errors);
-        $this->assertEquals('This value is too long. It should have 64 characters or less.', $errors[0]->getMessage());
+        self::assertCount(1, $errors);
+        self::assertEquals('This value is too long. It should have 64 characters or less.', $errors[0]->getMessage());
     }
 
     public function testSubmitWithStreetTooShort(): void
@@ -106,12 +106,12 @@ class PickupPointSearchTypeTest extends TypeTestCase
         $form = $this->factory->create(PickupPointSearchType::class, $address);
         $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
+        self::assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
 
-        $this->assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
+        self::assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
         $errors = $form->get('street')->getErrors(true);
-        $this->assertCount(1, $errors);
-        $this->assertEquals('This value is too short. It should have 3 characters or more.', $errors[0]->getMessage());
+        self::assertCount(1, $errors);
+        self::assertEquals('This value is too short. It should have 3 characters or more.', $errors[0]->getMessage());
     }
 
     public function testSubmitWithStreetTooLong(): void
@@ -127,12 +127,12 @@ class PickupPointSearchTypeTest extends TypeTestCase
         $form = $this->factory->create(PickupPointSearchType::class, $address);
         $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
+        self::assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
 
-        $this->assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
+        self::assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
         $errors = $form->get('street')->getErrors(true);
-        $this->assertCount(1, $errors);
-        $this->assertEquals('This value is too long. It should have 64 characters or less.', $errors[0]->getMessage());
+        self::assertCount(1, $errors);
+        self::assertEquals('This value is too long. It should have 64 characters or less.', $errors[0]->getMessage());
     }
 
     public function testSubmitPostalCodeIsRequiredWhenStreetIsFilled(): void
@@ -148,12 +148,12 @@ class PickupPointSearchTypeTest extends TypeTestCase
         $form = $this->factory->create(PickupPointSearchType::class, $address);
         $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
+        self::assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
 
-        $this->assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
+        self::assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
         $errors = $form->get('postalCode')->getErrors(true);
-        $this->assertCount(1, $errors);
-        $this->assertEquals('This value should not be blank.', $errors[0]->getMessage());
+        self::assertCount(1, $errors);
+        self::assertEquals('This value should not be blank.', $errors[0]->getMessage());
     }
 
     public function testSubmitPostalCodeHasInvalidPattern(): void
@@ -169,12 +169,12 @@ class PickupPointSearchTypeTest extends TypeTestCase
         $form = $this->factory->create(PickupPointSearchType::class, $address);
         $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
+        self::assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
 
-        $this->assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
+        self::assertFalse($form->isValid(), 'Form should be invalid with the given incorrect data.');
         $errors = $form->get('postalCode')->getErrors(true);
-        $this->assertCount(1, $errors);
-        $this->assertEquals('This value is not valid.', $errors[0]->getMessage());
+        self::assertCount(1, $errors);
+        self::assertEquals('This value is not valid.', $errors[0]->getMessage());
     }
 
     public function testSubmitNameFieldIsAvailableWhenSpecificPostalCodeIsFilled(): void
@@ -190,9 +190,9 @@ class PickupPointSearchTypeTest extends TypeTestCase
         $form = $this->factory->create(PickupPointSearchType::class, $address);
         $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
+        self::assertTrue($form->isSynchronized(), 'Even invalid data should not break form synchronization.');
 
-        $this->assertTrue($form->isValid(), 'Form should be invalid with the given incorrect data.');
-        $this->assertTrue($form->has('name')); // additional field
+        self::assertTrue($form->isValid(), 'Form should be invalid with the given incorrect data.');
+        self::assertTrue($form->has('name')); // additional field
     }
 }

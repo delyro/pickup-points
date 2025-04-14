@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\External\Easypack;
 
-use App\External\Easypack\Response\Response;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 interface EasypackClientInterface
 {
-    public function getCityPickupPoints(string $city): Response;
+    public function get(string $resource, array $queryData): ResponseInterface;
 }

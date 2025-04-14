@@ -23,7 +23,16 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\External\Easypack\EasypackHttpClient:
+    App\External\Easypack\Configuration:
         arguments:
-            $baseUrl: '%env(EASYPACK_BASE_URL)%'
-            
+            - '%env(EASYPACK_BASE_URL)%'
+    
+    App\External\Easypack\BaseUrl:
+        factory: ['@App\External\Easypack\Configuration', 'getBaseUrl']
+        
+    App\External\Easypack\PickupPoints\GetCityPickupPointsFromEasypackApi: ~
+    
+    App\External\Easypack\PickupPoints\CachedGetCityPickupPoints:
+        decorates: App\External\Easypack\PickupPoints\GetCityPickupPointsFromEasypackApi
+        
+    App\External\Easypack\PickupPoints\GetCityPickupPoints: '@App\External\Easypack\PickupPoints\CachedGetCityPickupPoints'

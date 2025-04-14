@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\External\Easypack\Response;
+namespace App\External\Easypack\PickupPoints;
 
+use App\External\Easypack\PickupPoints\CityPickupPoint\Item;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
-class Response
+class CityPickupPoints
 {
     public int $count;
 
